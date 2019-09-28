@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">  
+    <div class="col-sm-12 col-xs-12 adddocrow">
+        <h1 class="col-sm-6 col-xs-12 displayactive">Active Documents</h1>
+        <button type="button" class="col-sm-2 col-xs-12 btn btn-primary pull-right addbutton" data-toggle="modal" data-target="#adddocmodal"><i class="fa fa-plus-circle"></i>   Add Document</button>
+    </div>
+    <div class="row col-sm-12 col-xs-12 alldocum">
+        {% for eachdocument in ActiveDocs %}
+        <div class="card text-white bg-success mb-3 mr-5" style="max-width: 23rem;">
+            <div class="card-header"><h3>{{eachdocument.docname}}<a class="deletedoc" href="/deletedocument/{{eachdocument.id}}/"><i class="fa fa-times-circle pull-right"></i></a></h3></div>
+            <div class="card-body">
+                <p class="card-title cardshow">{{eachdocument.description|truncatechars:200 }}...</p>
+            </div>
+        </div>
+        {% endfor %}
+    
+    </div>
+    <table class="table table-striped table-bordered requesttable">
+        <thead>
+            <th>Student Name</th>
+            <th>Requested Document</th>
+            <th>Additional Info</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+        {% for eachrequest in requestedDocs %}
+            <tr>
+                <td>{{eachrequest.user.first_name}} {{eachrequest.user.last_name}}</td>
+                <td>{{eachrequest.document.docname}}</td>
+                <td>{{eachrequest.Additionalinfo}}</td>
+                <td><a href="/deleterequest/{{eachrequest.id}}/" class="btn btn-success btn-lg readybutton">Ready</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="modal" role="dialog" id="adddocmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Document</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="/adddocument/" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="docname">Document Name:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="docname" name="docname" placeholder="Enter Document Name" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="description">Description:</label>
+                            <div class="col-sm-9">
+                            <input type="text" class="form-control" id="description" name="description" placeholder="Enter description">
+                            </div>
+                        </div>
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+    
